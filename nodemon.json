@@ -1,0 +1,7 @@
+{
+  "verbose": true,
+  "watch": ["./src/backend", "./webpack.config.js"],
+  "env": {
+    "NODE_ENV": "development"
+  }
+}

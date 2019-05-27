@@ -1,0 +1,451 @@
+@basic-background-color: #f3f7fa;
+@secondary-background-color: white;
+@basic-button-shadow-color: rgba(80, 100, 140, 0.3);
+@basic-border-color: lightgray;
+@secondary-border-color: lighten(@basic-border-color, 10%);
+@basic-input-color: #349ef0;
+@secondary-input-color: lighten(@basic-input-color, 40%);
+
+@app-max-width: 820px;
+
+@font-family: sans;
+@basic-font-size: 13px;
+
+@basic-indent-between-elements: 1.5rem;
+
+@min768: ~"(min-width: 768px)";
+
+@position-to-center: {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+}
+
+@reset-padding-margin: {
+  padding: 0;
+  margin: 0;
+}
+
+@reset-border-and-background: {
+  border: none;
+  background: none;
+}
+
+@reset-button-style: {
+  padding: 0;
+  border: none;
+  font: inherit;
+  color: inherit;
+  background-color: transparent;
+}
+
+.set-size(@size) {
+  width: @size;
+  height: @size;
+}
+
+.set-size(@width; @height) {
+  width: @width;
+  height: @height;
+}
+
+.set-border-radius(@radius: 5px) {
+  border-radius: @radius;
+}
+
+.set-border-radius(left; @radius: 5px) {
+  border-radius: @radius 0 0 @radius;
+}
+
+.set-border-radius(right; @radius: 5px) {
+  border-radius: 0 @radius @radius 0;
+}
+
+.set-background-image-from-sprites(@horizontal-coord; @vertical-coord) {
+  background: url("../images/sprites.png") @horizontal-coord @vertical-coord no-repeat;
+}
+
+.set-border(@color) {
+  border: 1px solid @color;
+}
+
+.set-border(@color; @side) {
+  border: none;
+  border-@{side}: 1px solid @color;
+}
+
+.set-shadow(large; @color: @basic-button-shadow-color) {
+  box-shadow: 0 5px 12px 0px @color;
+}
+
+.set-shadow(small; @color: @basic-button-shadow-color) {
+  box-shadow: 0 0 4px 0 @color;
+}
+
+body {
+  background-color: @basic-background-color;
+  max-width: 100%;
+  margin: 0 auto;
+  font-family: @font-family;
+  font-size: @basic-font-size;
+  @media @min768 {
+    max-width: @app-max-width;
+  }
+}
+
+header {
+  @desktops-header-size: 160px;
+  @mobiles-header-size: 100px;
+
+  position: relative;
+  .set-size(initial; @mobiles-header-size);
+  @media @min768 {
+    .set-size(initial; @desktops-header-size);
+  }
+
+  .logo {
+    .set-size(60px);
+    .set-shadow(large);
+    .set-background-image-from-sprites(0; 0);
+    .set-border-radius(50%);
+    @position-to-center();
+  }
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  @media @min768 {
+    flex-direction: row;
+  }
+
+  & > aside {
+    @media @min768 {
+      flex-basis: 28%;
+      margin-right: @basic-indent-between-elements;
+    }
+  }
+
+  & > section {
+    @media @min768 {
+      flex-grow: 1;
+      margin: 0;
+    }
+  }
+
+  & > * {
+    margin: 0 (@basic-indent-between-elements / 2);
+  }
+}
+
+ul {
+  @reset-padding-margin();
+  list-style: none;
+
+  li {
+    @reset-padding-margin();
+  }
+}
+
+button,
+button:active,
+button:focus {
+  outline: none;
+}
+
+.dashboard {
+  background-color: @secondary-background-color;
+  padding: (@basic-indent-between-elements / 1.5);
+  margin-bottom: @basic-indent-between-elements;
+  text-transform: uppercase;
+  .set-border-radius();
+  .set-shadow(small);
+
+  fieldset {
+    border-style: none;
+    margin: (@basic-indent-between-elements) 0;
+    @reset-padding-margin();
+
+
+    legend {
+      @reset-padding-margin();
+      margin-bottom: @basic-indent-between-elements / 2;
+    }
+  }
+
+  .currency {
+    margin-bottom: @basic-indent-between-elements * 1.3;
+
+    ul {
+      color: @basic-input-color;
+      display: flex;
+
+      li {
+        cursor: pointer;
+        flex-grow: 1;
+        margin-right: -1px;
+
+        input {
+          display: none;
+        }
+
+        label {
+          display: block;
+          position: relative;
+          padding: (@basic-indent-between-elements / 2) (@basic-indent-between-elements / 1.5);
+          text-align: center;
+          .set-border(@basic-border-color);
+        }
+
+        &:first-child label {
+          .set-border-radius(left);
+        }
+
+        &:last-child label {
+          .set-border-radius(right);
+        }
+
+        &:hover label {
+          .set-border(@basic-input-color);
+          background-color: @secondary-input-color;
+          z-index: 2;
+        }
+
+        input:checked + label {
+          &:extend(.dashboard .currency ul li:hover label);
+          color: @secondary-background-color;
+          background-color: @basic-input-color;
+        }
+      }
+    }
+  }
+
+  .transshipments-count {
+    ul {
+      text-transform: none;
+      display: flex;
+      flex-wrap: wrap;
+      @media @min768 {
+        display: block;
+      }
+
+      li {
+        flex-basis: 50%;
+        @media @min768 {
+          margin: 0 (@basic-indent-between-elements / 1.5 * -1);
+          padding: 0 (@basic-indent-between-elements / 1.5);
+        }
+
+        &:hover {
+          background-color: @secondary-input-color;
+
+          & .only-button {
+            display: initial;
+            cursor: pointer;
+          }
+        }
+
+        input {
+          display: none;
+
+          & + label::before {
+            .set-background-image-from-sprites(-66px, 0);
+          }
+
+          &:checked + label::before {
+            .set-background-image-from-sprites(-66px, -23px);
+          }
+        }
+
+        label {
+          display: flex;
+          cursor: pointer;
+          user-select: none;
+          align-items: center;
+          padding: (@basic-indent-between-elements / 4) 0;
+
+          &::before {
+            content: "";
+            .set-size(22px);
+            display: inline-block;
+            margin-right: @basic-indent-between-elements / 3;
+          }
+
+          .only-button {
+            @reset-button-style();
+            font-size: @basic-font-size * 0.85;
+            margin-left: auto;
+            text-transform: uppercase;
+            color: @basic-input-color;
+            display: none;
+          }
+        }
+      }
+    } 
+  }
+}
+
+.ticket {
+  @secondary-text-color: darken(@basic-border-color, 15%);
+
+  @reset-padding-margin();
+  display: flex;
+  flex-direction: column;
+  background-color: @secondary-background-color;
+  margin-bottom: @basic-indent-between-elements;
+  .set-shadow(small);
+  .set-border-radius();
+  @media @min768 {
+    flex-direction: row;
+  }
+
+  &:hover {
+    .set-shadow(large);
+  }
+
+  .buy {
+    display: flex;
+    flex-shrink: 0;
+    padding: @basic-indent-between-elements / 2;
+    .set-border(@secondary-border-color; bottom);
+    @media @min768 {
+      display: block;
+      flex-basis: 25%;
+      padding: @basic-indent-between-elements;
+      .set-border(@secondary-border-color; right);
+    }
+
+    .carrier {
+      .set-size(125px; 60px);
+      @media @min768 {
+        margin: 0 auto (@basic-indent-between-elements / 2) auto;
+      }
+
+      &[data-carrier-name="TK"] {
+        .set-background-image-from-sprites(-95px, 10px)
+      }
+    }
+
+    .buy-button {
+      @basic-button-bg-color: #ff6d00;
+      @hover-button-bg-color: lighten(@basic-button-bg-color, 5%);
+      @active-button-bg-color: darken(@basic-button-bg-color, 5%);
+      @basic-button-shadow-color: darken(@basic-button-bg-color, 10%);
+      @hover-button-shadow-color: lighten(@basic-button-shadow-color, 5%);
+      @active-button-shadow-color: darken(@basic-button-shadow-color, 5%);
+
+      @reset-button-style();
+
+      display: block;
+      flex-basis: 43%;
+      padding: @basic-indent-between-elements / 2.5;
+      text-decoration: none;
+      font-size: @basic-font-size * 1.2;
+      text-align: center;
+      background-color: @basic-button-bg-color;
+      color: @secondary-background-color;
+      margin-left: auto;
+      .set-border-radius();
+      .set-shadow(small; @basic-button-shadow-color);
+      @media @min768 {
+        width: 100%;
+      }
+
+      &:hover {
+        background-color: @hover-button-bg-color;
+        .set-shadow(small;  @hover-button-shadow-color);
+      }
+
+      &:active {
+        background-color: @active-button-bg-color;
+        .set-shadow(small; @active-button-shadow-color);
+      }
+    }
+  }
+
+  .info {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    padding: @basic-indent-between-elements / 2;
+    @media @min768 {
+      flex-direction: row;
+      padding: @basic-indent-between-elements;
+      align-items: flex-start;
+    }
+
+    .waypoint {
+      @reset-padding-margin();
+      position: relative;
+      @media @min768 {
+        flex-basis: 33%;
+      }
+
+      .time {
+        font-size: @basic-font-size * 2.3;
+        margin-bottom: @basic-indent-between-elements;
+      }
+
+      .airport {
+        position: absolute;
+        white-space: nowrap;
+        top: @basic-indent-between-elements * 1.7;
+      }
+ 
+      .date {
+        color: @secondary-text-color;
+        font-size: @basic-font-size * 0.9;
+      }
+
+      &.departure {
+        .airport {
+          left: 0;
+        }
+      }
+
+      &.arrival {
+        text-align: right;
+
+        .airport {
+          right: 0;
+        }
+      }
+
+      p {
+        @reset-padding-margin();
+      }
+    }
+
+    .transshipments-info {
+      position: relative;
+      text-align: center;
+      color: @secondary-text-color;
+      text-transform: uppercase;
+      font-size: @basic-font-size * 0.8;
+      padding: (@basic-indent-between-elements / 4);
+      margin: (@basic-indent-between-elements / 3) 0;
+      align-self: center;
+      .set-border(@basic-border-color; bottom);
+      @media @min768 {
+        flex-basis: 34%;
+        align-self: start;
+        margin: 0;
+      }
+
+      &::after {
+        @icon-size: 13px;
+
+        content: "";
+        position: absolute;
+        right: 0;
+        bottom: @icon-size / 2 * -1;
+
+        .set-size(@icon-size);
+        .set-background-image-from-sprites(-69px, -47px);
+      }
+    }
+  }
+}

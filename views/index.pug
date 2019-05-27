@@ -1,0 +1,88 @@
+doctype html
+html
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    title Поиск билетов
+    link(rel="stylesheet", href="/assets/main.css")
+    script.
+      var gon = !{JSON.stringify(gon)}
+  body
+    header
+      div.logo
+    main#root
+      aside
+        form.dashboard
+          fieldset.currency
+            legend валюта
+            ul
+              li
+                input#currency-rubles(type="radio", name="currency", value="rub")
+                label(for="currency-rubles") RUB
+              li
+                input#currency-dollars(type="radio", name="currency", value="usd")
+                label(for="currency-dollars") USD
+              li
+                input#currency-euros(type="radio", name="currency", value="eur")
+                label(for="currency-euros") EUR
+          fieldset.transshipments-count
+            legend количество пересадок
+            ul
+              li
+                input#all-variants(type="checkbox" name="all-variants")
+                label(for="all-variants") Все#[button.only-button только]
+              li
+                input#no-transshipments(type="checkbox" name="no-transshipments")
+                label(for="no-transshipments") Без пересадок#[button.only-button только]
+              li
+                input#one-transshipments(type="checkbox" name="one-transshipments")
+                label(for="one-transshipments") 1 пересадка#[button.only-button только]
+              li
+                input#two-transshipments(type="checkbox" name="two-transshipments")
+                label(for="two-transshipments") 2 пересадки#[button.only-button только]
+              li
+                input#three-transshipments(type="checkbox" name="three-transshipments")
+                label(for="three-transshipments") 3 пересадки#[button.only-button только]
+      section
+        ul.tickets-list
+          li
+            div.ticket
+              section.buy
+                div.carrier(data-carrier-name="turkish-airlanes")
+                a.buy-button(href="#") Купить
+                  br
+                  .
+                    за 21 035Р
+              section.info
+                figure.waypoint
+                  p.time 09:25
+                  figcaption
+                    p.airport VVO, Владивосток
+                    p.date 9 окт 2018, Пт
+                div.transshipments-info Без пересадок
+                figure.waypoint
+                  p.time 11:45
+                  figcaption
+                    p.airport Тель-Авив, TLV
+                    p.date 10 окт 2018, Сб
+          li
+            div.ticket
+              section.buy
+                div.carrier(data-carrier-name="turkish-airlanes")
+                a.buy-button(href="#") Купить
+                  br
+                  .
+                    за 21 035 RUR
+              section.info
+                figure.waypoint
+                  p.time 09:25
+                  figcaption
+                    p.airport VVO, Владивосток
+                    p.date 9 окт 2018, Пт
+                div.transshipments-info 1 пересадка
+                figure.waypoint
+                  p.time 11:45
+                  figcaption
+                    p.airport Тель-Авив, TLV
+                    p.date 10 окт 2018, Сб
+    script(src='/assets/main.js')

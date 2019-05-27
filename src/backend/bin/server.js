@@ -1,0 +1,11 @@
+#!/usr/bin/env node
+
+import initHttpServerApp from '..';
+
+const server = initHttpServerApp();
+
+const port = process.env.PORT || 8080;
+
+server.listen(port, () => {
+  console.log(`Server has been started on port ${port}`);
+});
