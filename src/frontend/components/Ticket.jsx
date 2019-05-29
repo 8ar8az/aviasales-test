@@ -1,4 +1,9 @@
 import React from 'react';
+import cn from 'classnames';
+import _ from 'lodash';
+
+import connect from '../../lib/connect';
+import { currentCurrencySelector } from '../selectors';
 
 const gettersWaypointInfoFromTicket = {
   departure: ticket => [
@@ -15,6 +20,11 @@ const gettersWaypointInfoFromTicket = {
   ],
 };
 
+const mapStateToProps = state => ({
+  currentCurrency: currentCurrencySelector(state),
+});
+
+@connect(mapStateToProps)
 class Ticket extends React.Component {
   renderTicketWaypoint = (ticket, waypointType) => {
     const [city, airportAbbr, date, time] = gettersWaypointInfoFromTicket[waypointType](ticket);
@@ -28,8 +38,26 @@ class Ticket extends React.Component {
     );
   };
 
+  renderCurrencySymbol = (currencyId) => {
+    const classes = cn({
+      'currency-symbol': true,
+      euro: currencyId === 'eur',
+      dollar: currencyId === 'usd',
+      ruble: currencyId === 'rub',
+    });
+
+    const symbols = {
+      eur: '&euro;',
+      usd: '$',
+      rub: 'P',
+    };
+
+    // eslint-disable-next-line react/no-danger
+    return <span className={classes} dangerouslySetInnerHTML={{ __html: symbols[currencyId] }} />;
+  };
+
   render() {
-    const { ticket } = this.props;
+    const { ticket, currentCurrency } = this.props;
 
     return (
       <figure className="ticket">
@@ -38,12 +66,13 @@ class Ticket extends React.Component {
           <button type="button" className="buy-button">
             Купить
             <br />
-            {`за ${ticket.price}`}
+            {`за ${_.round(ticket.price / currentCurrency.exchangeRate, 2).toLocaleString()} `}
+            {this.renderCurrencySymbol(currentCurrency.id)}
           </button>
         </section>
         <section className="info">
           {this.renderTicketWaypoint(ticket, 'departure')}
-          <div className="transshipments-info">{`${ticket.stops} пересадок`}</div>
+          <div className="transshipments-info">{`${ticket.stops} пересадки`}</div>
           {this.renderTicketWaypoint(ticket, 'arrival')}
         </section>
       </figure>

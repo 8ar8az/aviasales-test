@@ -5,8 +5,9 @@ import _ from 'lodash';
 import connect from '../../lib/connect';
 import AppContext from './AppContext';
 
-const mapStateToProps = state => ({
-  currencyIds: state.currency.allIds,
+const mapStateToProps = ({ currency, currencyTogglerAccessibilityState }) => ({
+  currencyIds: currency.allIds,
+  currencyTogglerAccessibilityState,
 });
 
 @connect(mapStateToProps)
@@ -18,13 +19,20 @@ class Dashboard extends React.Component {
   static contextType = AppContext.Context;
 
   renderCurrencyToggler() {
-    const { currencyIds } = this.props;
+    const { currencyIds, currencyTogglerAccessibilityState } = this.props;
 
     return (
       <ul>
         {_.map(currencyIds, currencyId => (
           <li key={currencyId}>
-            <Field component="input" type="radio" name="currency" value={currencyId} id={`currency-${currencyId}`} />
+            <Field
+              component="input"
+              type="radio"
+              name="currency"
+              value={currencyId}
+              id={`currency-${currencyId}`}
+              disabled={currencyTogglerAccessibilityState === 'disabled'}
+            />
             <label htmlFor={`currency-${currencyId}`}>{currencyId}</label>
           </li>
         ))}

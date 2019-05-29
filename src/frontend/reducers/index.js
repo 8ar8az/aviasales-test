@@ -1,6 +1,7 @@
 import { combineReducers } from 'redux';
 import { reducer as formReducer } from 'redux-form';
 import { handleActions } from 'redux-actions';
+import _ from 'lodash';
 
 import * as actions from '../actions';
 
@@ -25,7 +26,16 @@ const currency = handleActions({
   allIds: ['rub', 'usd', 'eur'],
 });
 
+const currencyTogglerAccessibilityState = handleActions({
+  [combineReducers(
+    actions.fetchExchangeRatesRequest,
+    actions.fetchExchangeRatesFailure,
+  )]: _.constant('disabled'),
+  [actions.fetchExchangeRatesSuccess]: _.constant('enabled'),
+}, 'disabled');
+
 export default combineReducers({
   currency,
+  currencyTogglerAccessibilityState,
   form: formReducer,
 });

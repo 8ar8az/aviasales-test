@@ -5,6 +5,8 @@
 @secondary-border-color: lighten(@basic-border-color, 10%);
 @basic-input-color: #349ef0;
 @secondary-input-color: lighten(@basic-input-color, 40%);
+@disabled-element-color: #f8f8f8;
+@disabled-border-color: darken(@disabled-element-color, 25%);
 
 @app-max-width: 820px;
 
@@ -212,6 +214,12 @@ button:focus {
           .set-border(@basic-input-color);
           background-color: @secondary-input-color;
           z-index: 2;
+        }
+
+        input:disabled:not([value="rub"]) + label {
+          background-color: @disabled-element-color;
+          .set-border(@disabled-border-color);
+          color: @disabled-border-color;
         }
 
         input:checked + label {
@@ -446,6 +454,21 @@ button:focus {
         .set-size(@icon-size);
         .set-background-image-from-sprites(-69px, -47px);
       }
+    }
+  }
+}
+
+.currency-symbol {
+  &.ruble {
+    position: relative;
+
+    &::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 64%;
+      width: 8px;
+      border-bottom: 1px solid @secondary-background-color;
     }
   }
 }

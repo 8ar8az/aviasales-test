@@ -25,13 +25,19 @@ export default () => {
 
   const app = new Koa();
   const router = new Router();
+  const apiRouter = new Router();
+
+  apiRouter
+    .get('exchangeRates', '/exch-rates', async (ctx) => {
+      ctx.body = { usdExchangeRate: 64.5394, eurExchangeRate: 72.1680 };
+    });
 
   router
     .get('index', '/', async (ctx) => {
       const ticketsJSON = await fs.promises.readFile(path.resolve(__dirname, '..', '..', 'data', 'tickets.json'), 'UTF-8');
-      const gon = { ...JSON.parse(ticketsJSON) };
-      ctx.render('index', { gon });
-    });
+      ctx.render('index', { gon: JSON.parse(ticketsJSON) });
+    })
+    .use('/api', apiRouter.routes(), apiRouter.allowedMethods());
 
   app.use(logger());
   if (isDevelopment) {

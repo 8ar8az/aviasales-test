@@ -1,21 +1,28 @@
 import '@babel/polyfill';
 import './assets/styles/styles.less';
-import { createStore } from 'redux';
+import { createStore, applyMiddleware, compose } from 'redux';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
+import thunk from 'redux-thunk';
 import _ from 'lodash';
 import gon from 'gon';
 
 import AppContext from './components/AppContext';
 import App from './components/App';
 import reducers from './reducers';
+import { fetchExchangeRates } from './actions';
 
 const initializeStore = () => {
+  // eslint-disable-next-line no-underscore-dangle
+  const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+
   const store = createStore(
     reducers,
     // eslint-disable-next-line no-underscore-dangle
-    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
+    composeEnhancers(
+      applyMiddleware(thunk),
+    ),
   );
   return store;
 };
@@ -43,8 +50,9 @@ const transshipmentsVariants = [
 
 const startApp = (initData) => {
   const store = initializeStore();
-  const normalizedData = normalizeInitData(initData);
+  store.dispatch(fetchExchangeRates());
 
+  const normalizedData = normalizeInitData(initData);
   const application = initializeApplication(store, { ...normalizedData, transshipmentsVariants });
 
   ReactDOM.render(
