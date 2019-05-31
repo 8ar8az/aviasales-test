@@ -5,6 +5,15 @@ import _ from 'lodash';
 
 import * as actions from '../actions';
 
+const tickets = handleActions({
+  [actions.fetchTicketsSuccess](state, { payload }) {
+    return {
+      allIds: _.map(payload.tickets, 'id'),
+      byId: _.keyBy(payload.tickets, 'id'),
+    };
+  },
+}, { byId: {}, allIds: [] });
+
 const currency = handleActions({
   [actions.fetchExchangeRatesSuccess](state, { payload: { usdExchangeRate, eurExchangeRate } }) {
     const { byId } = state;
@@ -37,5 +46,6 @@ const currencyTogglerAccessibilityState = handleActions({
 export default combineReducers({
   currency,
   currencyTogglerAccessibilityState,
+  tickets,
   form: formReducer,
 });

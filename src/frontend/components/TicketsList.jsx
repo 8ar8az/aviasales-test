@@ -1,14 +1,18 @@
 import React from 'react';
 import _ from 'lodash';
 
-import AppContext from './AppContext';
 import Ticket from './Ticket';
+import connect from '../../lib/connect';
+import { ticketsSelector } from '../selectors';
 
+const mapStateToProps = state => ({
+  tickets: ticketsSelector(state),
+});
+
+@connect(mapStateToProps)
 class TicketsList extends React.Component {
-  static contextType = AppContext.Context;
-
   render() {
-    const { tickets } = this.context;
+    const { tickets } = this.props;
 
     return (
       <ul className="tickets-list">

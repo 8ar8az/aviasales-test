@@ -18,6 +18,19 @@ const mapStateToProps = ({ currency, currencyTogglerAccessibilityState }) => ({
 class Dashboard extends React.Component {
   static contextType = AppContext.Context;
 
+  handleOnlyButtonClick = transshipmentVariantId => () => {
+    const { change } = this.props;
+    const { transshipmentsVariants } = this.context;
+
+    _.forEach(transshipmentsVariants, ({ id }) => {
+      if (id === transshipmentVariantId) {
+        change(id, true);
+      } else {
+        change(id, false);
+      }
+    });
+  };
+
   renderCurrencyToggler() {
     const { currencyIds, currencyTogglerAccessibilityState } = this.props;
 
@@ -49,8 +62,8 @@ class Dashboard extends React.Component {
           <li key={id}>
             <Field component="input" name={id} id={id} type="checkbox" />
             <label htmlFor={id}>
-              {id}
-              <button className="only-button" type="button">/ONLY/</button>
+              {id.slice(5)}
+              <button className="only-button" type="button" onClick={this.handleOnlyButtonClick(id)}>/ONLY/</button>
             </label>
           </li>
         ))}

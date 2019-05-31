@@ -28,14 +28,17 @@ export default () => {
   const apiRouter = new Router();
 
   apiRouter
+    .get('tickets', '/tickets', async (ctx) => {
+      const ticketsJSON = await fs.promises.readFile(path.resolve(__dirname, '..', '..', 'data', 'tickets.json'), 'UTF-8');
+      ctx.body = JSON.parse(ticketsJSON);
+    })
     .get('exchangeRates', '/exch-rates', async (ctx) => {
       ctx.body = { usdExchangeRate: 64.5394, eurExchangeRate: 72.1680 };
     });
 
   router
     .get('index', '/', async (ctx) => {
-      const ticketsJSON = await fs.promises.readFile(path.resolve(__dirname, '..', '..', 'data', 'tickets.json'), 'UTF-8');
-      ctx.render('index', { gon: JSON.parse(ticketsJSON) });
+      ctx.render('index');
     })
     .use('/api', apiRouter.routes(), apiRouter.allowedMethods());
 
